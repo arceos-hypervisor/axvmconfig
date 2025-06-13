@@ -74,6 +74,31 @@ pub struct VmMemConfig {
     pub map_type: VmMemMappingType,
 }
 
+/// The type of Emulated Device.
+#[derive(Debug, Clone, PartialEq, Eq, serde_repr::Serialize_repr, serde_repr::Deserialize_repr)]
+#[repr(u8)]
+pub enum EmulatedDeviceType {
+    /// A generic emulated device.
+    Generic = 0,
+    /// A emulated device that provides Inter-VM Communication (IVC) channel.
+    /// This device is used for communication between different VMs,
+    /// the corresponding memory region of this device should be marked as `Reserved` in
+    /// device tree or ACPI table.
+    IVCChannel = 1,
+    /// A Virtio block device.
+    VirtioBlk = 2,
+    /// A Virtio network device.
+    VirtioNet = 3,
+    /// A Virtio console device.
+    VirtioConsole = 4,
+}
+
+impl Default for EmulatedDeviceType {
+    fn default() -> Self {
+        Self::Generic
+    }
+}
+
 /// A part of `AxVMConfig`, which represents the configuration of an emulated device for a virtual machine.
 #[derive(Debug, Default, Clone, serde::Serialize, serde::Deserialize)]
 pub struct EmulatedDeviceConfig {
@@ -86,7 +111,7 @@ pub struct EmulatedDeviceConfig {
     /// The IRQ (Interrupt Request) ID of the device.
     pub irq_id: usize,
     /// The type of emulated device.
-    pub emu_type: usize,
+    pub emu_type: EmulatedDeviceType,
     /// The config_list of the device
     pub cfg_list: Vec<usize>,
 }
