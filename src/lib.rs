@@ -124,7 +124,6 @@ pub enum EmulatedDeviceType {
     /// Virtio console device.
     VirtioConsole = 0xE3,
     // Following are some other emulated devices that are not currently used and removed from the enum temporarily.
-
     // /// IOMMU device.
     // IOMMU = 0x6,
     // /// Interrupt ICC SRE device.
