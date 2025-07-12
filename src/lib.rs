@@ -184,20 +184,20 @@ impl EmulatedDeviceType {
     /// Converts a usize value to an EmulatedDeviceType.
     pub fn from_usize(value: usize) -> EmulatedDeviceType {
         match value {
-            0x0 => EmulatedDeviceType::Console,
+            0x0 => EmulatedDeviceType::Dummy,
             0x1 => EmulatedDeviceType::InterruptController,
-            0x2 => EmulatedDeviceType::GPPTRedistributor,
-            0x3 => EmulatedDeviceType::GPPTDistributor,
-            0x4 => EmulatedDeviceType::GPPTITS,
+            0x2 => EmulatedDeviceType::Console,
+            0xA => EmulatedDeviceType::IVCChannel,
+            0x20 => EmulatedDeviceType::GPPTRedistributor,
+            0x21 => EmulatedDeviceType::GPPTDistributor,
+            0x22 => EmulatedDeviceType::GPPTITS,
+            0xE1 => EmulatedDeviceType::VirtioBlk,
+            0xE2 => EmulatedDeviceType::VirtioNet,
+            0xE3 => EmulatedDeviceType::VirtioConsole,
             // 0x6 => EmulatedDeviceType::IOMMU,
             // 0x7 => EmulatedDeviceType::ICCSRE,
             // 0x8 => EmulatedDeviceType::SGIR,
             // 0x9 => EmulatedDeviceType::GICR,
-            0xA => EmulatedDeviceType::IVCChannel,
-            0xB => EmulatedDeviceType::Dummy,
-            0x21 => EmulatedDeviceType::VirtioBlk,
-            0x22 => EmulatedDeviceType::VirtioNet,
-            0x23 => EmulatedDeviceType::VirtioConsole,
             _ => {
                 warn!("Unknown emulated device type value: {value}, default to Meta");
                 EmulatedDeviceType::Dummy
