@@ -99,7 +99,7 @@ pub enum EmulatedDeviceType {
     EmuDeviceTSGIR = 8,
     /// Interrupt controller GICR device.
     EmuDeviceTGICR = 9,
-    /// A emulated device that provides Inter-VM Communication (IVC) channel.
+    /// An emulated device that provides Inter-VM Communication (IVC) channel.
     /// This device is used for communication between different VMs,
     /// the corresponding memory region of this device should be marked as `Reserved` in
     /// device tree or ACPI table.
@@ -119,18 +119,18 @@ impl Display for EmulatedDeviceType {
     fn fmt(&self, f: &mut Formatter<'_>) -> core::fmt::Result {
         match self {
             EmulatedDeviceType::EmuDeviceTConsole => write!(f, "console"),
-            EmulatedDeviceType::EmuDeviceTInterruptController => write!(f, "Interrupt controller"),
+            EmulatedDeviceType::EmuDeviceTInterruptController => write!(f, "interrupt controller"),
             EmulatedDeviceType::EmuDeviceTGPPT => {
                 write!(f, "partial passthrough interrupt controller")
             }
             EmulatedDeviceType::EmuDeviceTVirtioBlk => write!(f, "virtio block"),
             EmulatedDeviceType::EmuDeviceTVirtioNet => write!(f, "virtio net"),
             EmulatedDeviceType::EmuDeviceTVirtioConsole => write!(f, "virtio console"),
-            EmulatedDeviceType::EmuDeviceTIOMMU => write!(f, "IOMMU"),
-            EmulatedDeviceType::EmuDeviceTICCSRE => write!(f, "interrupt ICC SRE"),
-            EmulatedDeviceType::EmuDeviceTSGIR => write!(f, "interrupt ICC SGIR"),
+            EmulatedDeviceType::EmuDeviceTIOMMU => write!(f, "iommu"),
+            EmulatedDeviceType::EmuDeviceTICCSRE => write!(f, "interrupt icc sre"),
+            EmulatedDeviceType::EmuDeviceTSGIR => write!(f, "interrupt icc sgir"),
             EmulatedDeviceType::EmuDeviceTGICR => write!(f, "interrupt controller gicr"),
-            EmulatedDeviceType::EmuDeviceTIVCChannel => write!(f, "IVC channel"),
+            EmulatedDeviceType::EmuDeviceTIVCChannel => write!(f, "ivc channel"),
             EmulatedDeviceType::EmuDeviceTMeta => write!(f, "meta device"),
         }
     }
@@ -168,7 +168,7 @@ impl EmulatedDeviceType {
             9 => EmulatedDeviceType::EmuDeviceTGICR,
             10 => EmulatedDeviceType::EmuDeviceTIVCChannel,
             11 => EmulatedDeviceType::EmuDeviceTMeta,
-            _ => panic!("Unknown  EmulatedDeviceType value: {}", value),
+            _ => panic!("Unknown EmulatedDeviceType value: {}", value),
         }
     }
 }
