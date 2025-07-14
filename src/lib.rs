@@ -55,7 +55,7 @@ pub enum VmMemMappingType {
     /// The memory region is allocated by the VM monitor.
     MapAlloc = 0,
     /// The memory region is identical to the host physical memory region.
-    MapIentical = 1,
+    MapIdentical = 1,
 }
 
 /// The default value of `VmMemMappingType` is `MapAlloc`.
@@ -206,24 +206,6 @@ impl EmulatedDeviceType {
     }
 }
 
-#[cfg(test)]
-mod emu_dev_type_test {
-    use super::EmulatedDeviceType;
-    use enumerable::Enumerable;
-
-    #[test]
-    fn test_emu_dev_type_from_usize() {
-        for emu_dev_type in EmulatedDeviceType::enumerator() {
-            let converted = EmulatedDeviceType::from_usize(emu_dev_type as usize);
-            assert_eq!(
-                converted, emu_dev_type,
-                "Value mismatch after bidirectional conversion: {:?} -> {:?}",
-                emu_dev_type, converted
-            );
-        }
-    }
-}
-
 /// A part of `AxVMConfig`, which represents the configuration of an emulated device for a virtual machine.
 #[derive(Debug, Default, Clone, serde::Serialize, serde::Deserialize)]
 pub struct EmulatedDeviceConfig {
@@ -321,20 +303,20 @@ pub struct VMKernelConfig {
 /// Specifies how the VM should handle interrupts and interrupt controllers.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 pub enum VMInterruptMode {
+    /// The VM will not handle interrupts, and the guest OS should not use interrupts.
+    #[serde(rename = "no_irq", alias = "no", alias = "none")]
+    NoIrq,
     /// The VM will use the emulated interrupt controller to handle interrupts.
     #[serde(rename = "emu", alias = "emulated")]
     Emulated,
     /// The VM will use the passthrough interrupt controller (including GPPT) to handle interrupts.
     #[serde(rename = "passthrough", alias = "pt")]
     Passthrough,
-    /// The VM will not handle interrupts, and the guest OS should not use interrupts.
-    #[serde(rename = "no_irq", alias = "no", alias = "none")]
-    NoIrq,
 }
 
 impl Default for VMInterruptMode {
     fn default() -> Self {
-        Self::Emulated
+        Self::NoIrq
     }
 }
 
@@ -346,7 +328,8 @@ pub struct VMDevicesConfig {
     /// Passthrough device Information
     pub passthrough_devices: Vec<PassThroughDeviceConfig>,
     /// How the VM should handle interrupts and interrupt controllers.
-    pub interrupt_mode: Option<VMInterruptMode>,
+    #[serde(default)]
+    pub interrupt_mode: VMInterruptMode,
 }
 
 /// The configuration structure for the guest VM serialized from a toml file provided by user,
@@ -371,3 +354,6 @@ impl AxVMCrateConfig {
         Ok(config)
     }
 }
+
+#[cfg(test)]
+mod test;
