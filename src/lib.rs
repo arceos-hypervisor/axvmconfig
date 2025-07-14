@@ -318,6 +318,23 @@ pub struct VMKernelConfig {
     pub memory_regions: Vec<VmMemConfig>,
 }
 
+/// Specifies how the VM should handle interrupts and interrupt controllers.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+pub enum VMDeviceInterruptMode {
+    /// The VM will use the emulated interrupt controller to handle interrupts.
+    #[serde(rename = "emu")]
+    Emulated,
+    /// The VM will use the passthrough interrupt controller (including GPPT) to handle interrupts.
+    #[serde(rename = "passthrough")]
+    Passthrough,
+}
+
+impl Default for VMDeviceInterruptMode {
+    fn default() -> Self {
+        Self::Emulated
+    }
+}
+
 /// The configuration structure for the guest VM devices.
 #[derive(Debug, Default, Clone, serde::Serialize, serde::Deserialize)]
 pub struct VMDevicesConfig {
@@ -325,6 +342,8 @@ pub struct VMDevicesConfig {
     pub emu_devices: Vec<EmulatedDeviceConfig>,
     /// Passthrough device Information
     pub passthrough_devices: Vec<PassThroughDeviceConfig>,
+    /// How the VM should handle interrupts and interrupt controllers.
+    pub interrupt_mode: Option<VMDeviceInterruptMode>,
 }
 
 /// The configuration structure for the guest VM serialized from a toml file provided by user,
