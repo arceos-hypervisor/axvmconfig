@@ -322,11 +322,14 @@ pub struct VMKernelConfig {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 pub enum VMDeviceInterruptMode {
     /// The VM will use the emulated interrupt controller to handle interrupts.
-    #[serde(rename = "emu")]
+    #[serde(rename = "emu", alias = "emulated")]
     Emulated,
     /// The VM will use the passthrough interrupt controller (including GPPT) to handle interrupts.
-    #[serde(rename = "passthrough")]
+    #[serde(rename = "passthrough", alias = "pt")]
     Passthrough,
+    /// The VM will not handle interrupts, and the guest OS should not use interrupts.
+    #[serde(rename = "no_irq", alias = "no", alias = "none")]
+    NoIrq,
 }
 
 impl Default for VMDeviceInterruptMode {
