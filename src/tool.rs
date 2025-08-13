@@ -1,7 +1,7 @@
-/// ArceOS-Hypervisor VM configuration tool
-///
-/// This module provides a command-line interface for managing VM configurations,
-/// including validation of existing configurations and generation of new templates.
+//! ArceOS-Hypervisor VM configuration tool
+//!
+//! This module provides a command-line interface for managing VM configurations,
+//! including validation of existing configurations and generation of new templates.
 use std::env;
 use std::error::Error;
 use std::fs;

@@ -48,7 +48,7 @@ impl From<VMType> for usize {
     }
 }
 
-/// The type of memory mapping used for VM memory regions
+/// The type of memory mapping used for VM memory regions.
 ///
 /// Defines how virtual machine memory regions are mapped to host physical memory.
 /// This affects memory allocation and management strategies in the hypervisor.
@@ -62,14 +62,13 @@ pub enum VmMemMappingType {
 }
 
 /// The default value of `VmMemMappingType` is `MapAlloc`.
-/// This provides the most flexible memory allocation strategy.
 impl Default for VmMemMappingType {
     fn default() -> Self {
         Self::MapAlloc
     }
 }
 
-/// Configuration for a virtual machine memory region
+/// Configuration for a virtual machine memory region.
 ///
 /// Represents a contiguous memory region within the guest's physical address space.
 /// Each region has specific properties including address, size, access permissions,

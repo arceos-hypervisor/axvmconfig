@@ -1,10 +1,10 @@
-/// VM configuration template generation module
-///
-/// This module provides functionality to generate VM configuration templates
-/// with sensible defaults based on user-provided parameters.
+//! VM configuration template generation module.
+//!
+//! This module provides functionality to generate VM configuration templates
+//! with sensible defaults based on user-provided parameters.
 use crate::{AxVMCrateConfig, VMBaseConfig, VMDevicesConfig, VMKernelConfig};
 
-/// Generate a VM configuration template with specified parameters
+/// Generate a VM configuration template with specified parameters.
 ///
 /// Creates a complete VM configuration structure with the provided parameters
 /// and sensible defaults for optional fields. This is used by the CLI tool
