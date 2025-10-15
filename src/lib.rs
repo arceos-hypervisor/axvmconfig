@@ -59,6 +59,8 @@ pub enum VmMemMappingType {
     MapAlloc = 0,
     /// The memory region is identical to the host physical memory region.
     MapIdentical = 1,
+    /// The memory region is reserved memory for the guest OS.
+    MapReserved = 2,
 }
 
 /// The default value of `VmMemMappingType` is `MapAlloc`.
