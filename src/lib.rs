@@ -259,6 +259,17 @@ pub struct PassThroughDeviceConfig {
     pub irq_id: usize,
 }
 
+/// A part of `AxVMConfig`, which represents the configuration of a pass-through address for a virtual machine.
+#[derive(Debug, Default, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
+pub struct PassThroughAddressConfig {
+    /// The base GPA (Guest Physical Address).
+    #[serde(default)]
+    pub base_gpa: usize,
+    /// The address length.
+    #[serde(default)]
+    pub length: usize,
+}
+
 /// The configuration structure for the guest VM base info.
 #[cfg_attr(feature = "std", derive(schemars::JsonSchema))]
 #[derive(Debug, Default, Clone, serde::Serialize, serde::Deserialize)]
@@ -358,6 +369,9 @@ pub struct VMDevicesConfig {
     ///we would not like to pass through devices
     #[serde(default)]
     pub excluded_devices: Vec<Vec<String>>,
+    ///we would like to pass through address
+    #[serde(default)]
+    pub passthrough_addresses: Vec<PassThroughAddressConfig>,
 }
 
 /// The configuration structure for the guest VM serialized from a toml file provided by user,
