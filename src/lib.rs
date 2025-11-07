@@ -12,7 +12,6 @@ use alloc::string::String;
 use alloc::vec::Vec;
 use core::fmt::{Display, Formatter};
 use enumerable::Enumerable;
-use schemars::JsonSchema;
 use serde_repr::{Deserialize_repr, Serialize_repr};
 
 use axerrno::AxResult;
@@ -261,7 +260,8 @@ pub struct PassThroughDeviceConfig {
 }
 
 /// A part of `AxVMConfig`, which represents the configuration of a pass-through address for a virtual machine.
-#[derive(Debug, Default, Clone, PartialEq, JsonSchema, serde::Serialize, serde::Deserialize)]
+#[cfg_attr(feature = "std", derive(schemars::JsonSchema))]
+#[derive(Debug, Default, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
 pub struct PassThroughAddressConfig {
     /// The base GPA (Guest Physical Address).
     #[serde(default)]
