@@ -283,24 +283,9 @@ pub struct VMBaseConfig {
     pub vm_type: usize,
     // Resources.
     /// The number of virtual CPUs.
-    pub cpu_num: usize,
-    /// The physical CPU ids.
-    /// - if `None`, vcpu's physical id will be set as vcpu id.
-    /// - if set, each vcpu will be assigned to the specified physical CPU mask.
-    ///
-    /// Some ARM platforms will provide a specified cpu hw id in the device tree, which is
-    /// read from `MPIDR_EL1` register (probably for clustering).
-    pub phys_cpu_ids: Option<Vec<usize>>,
-    /// The mask of physical CPUs who can run this VM.
-    ///
-    /// - If `None`, vcpu will be scheduled on available physical CPUs randomly.
-    /// - If set, each vcpu will be scheduled on the specified physical CPUs.
-    ///      
-    ///     For example, [0x0101, 0x0010] means:
-    ///          - vCpu0 can be scheduled at pCpu0 and pCpu2;
-    ///          - vCpu1 will only be scheduled at pCpu1;
-    ///      It will phrase an error if the number of vCpus is not equal to the length of `phys_cpu_sets` array.
-    pub phys_cpu_sets: Option<Vec<usize>>,
+    pub cpu_num: Option<usize>,
+    /// The list of host CPU index to which the VM's vCPUs are pinned.
+    pub cpu_ids: Option<Vec<usize>>,
 }
 
 /// The configuration structure for the guest VM kernel.
@@ -326,13 +311,22 @@ pub struct VMKernelConfig {
     /// The load address of the ramdisk image, `None` if not used.
     pub ramdisk_load_addr: Option<usize>,
     /// The location of the image, default is 'fs'.
-    pub image_location: Option<String>,
+    pub image_location: Option<ImageLocation>,
     /// The command line of the kernel.
     pub cmdline: Option<String>,
     /// The path of the disk image.
     pub disk_path: Option<String>,
     /// Memory Information
     pub memory_regions: Vec<VmMemConfig>,
+}
+
+#[cfg_attr(feature = "std", derive(schemars::JsonSchema))]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+pub enum ImageLocation {
+    #[serde(rename = "fs")]
+    Fs,
+    #[serde(rename = "memory")]
+    Memory,
 }
 
 /// Specifies how the VM should handle interrupts and interrupt controllers.
