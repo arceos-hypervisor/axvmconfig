@@ -293,11 +293,11 @@ pub struct VMBaseConfig {
 #[derive(Debug, Default, Clone, serde::Serialize, serde::Deserialize)]
 pub struct VMKernelConfig {
     /// The entry point of the kernel image.
-    pub entry_point: usize,
+    pub entry_point: Option<usize>,
     /// The file path of the kernel image.
     pub kernel_path: String,
     /// The load address of the kernel image.
-    pub kernel_load_addr: usize,
+    pub kernel_load_addr: Option<usize>,
     /// The file path of the BIOS image, `None` if not used.
     pub bios_path: Option<String>,
     /// The load address of the BIOS image, `None` if not used.
