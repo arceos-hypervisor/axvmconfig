@@ -2,7 +2,9 @@
 //!
 //! This module provides functionality to generate VM configuration templates
 //! with sensible defaults based on user-provided parameters.
-use crate::{AxVMCrateConfig, VMBaseConfig, VMDevicesConfig, VMKernelConfig};
+use crate::{
+    AxVMCrateConfig, VMBaseConfig, VMDevicesConfig, VMKernelConfig, VirtioBlkMmioDeviceConfig,
+};
 
 /// Generate a VM configuration template with specified parameters.
 ///
@@ -20,6 +22,7 @@ use crate::{AxVMCrateConfig, VMBaseConfig, VMDevicesConfig, VMKernelConfig};
 /// * `kernel_load_addr` - Address where kernel should be loaded
 /// * `image_location` - Location of kernel image ("fs" or "memory")
 /// * `cmdline` - Optional kernel command line parameters
+/// * `virtio_blk_mmio` - Optional VirtIO block device configuration
 ///
 /// # Returns
 /// * `AxVMCrateConfig` - Complete VM configuration structure
@@ -33,6 +36,7 @@ pub fn get_vm_config_template(
     kernel_load_addr: usize,
     image_location: String,
     cmdline: Option<String>,
+    virtio_blk_mmio: Option<Vec<VirtioBlkMmioDeviceConfig>>,
 ) -> AxVMCrateConfig {
     AxVMCrateConfig {
         // Basic VM configuration
@@ -66,6 +70,7 @@ pub fn get_vm_config_template(
             emu_devices: vec![],                // No emulated devices by default
             passthrough_devices: vec![],        // No passthrough devices by default
             interrupt_mode: Default::default(), // Use default interrupt mode
+            virtio_blk_mmio,
         },
     }
 }

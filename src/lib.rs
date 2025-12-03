@@ -247,6 +247,33 @@ pub struct PassThroughDeviceConfig {
     pub irq_id: usize,
 }
 
+/// A part of `AxVMConfig`, which represents the configuration of a VirtIO block device for a virtual machine.
+#[derive(Debug, Default, Clone, serde::Serialize, serde::Deserialize)]
+pub struct VirtioBlkMmioDeviceConfig {
+    /// The device ID.
+    pub device_id: String,
+    /// The MMIO base address.
+    pub mmio_base: String,
+    /// The MMIO size.
+    pub mmio_size: String,
+    /// The interrupt type.
+    pub interrupt_type: String,
+    /// The interrupt number.
+    pub interrupt_number: usize,
+    /// The guest device path.
+    pub guest_device_path: String,
+    /// The backend type.
+    pub backend_type: String,
+    /// The backend path.
+    pub backend_path: String,
+    /// The image size.
+    pub size: String,
+    /// Whether the device is readonly.
+    pub readonly: bool,
+    /// The serial number.
+    pub serial: String,
+}
+
 /// The configuration structure for the guest VM base info.
 #[derive(Debug, Default, Clone, serde::Serialize, serde::Deserialize)]
 pub struct VMBaseConfig {
@@ -339,6 +366,8 @@ pub struct VMDevicesConfig {
     /// How the VM should handle interrupts and interrupt controllers.
     #[serde(default)]
     pub interrupt_mode: VMInterruptMode,
+    /// VirtIO block device Information
+    pub virtio_blk_mmio: Option<Vec<VirtioBlkMmioDeviceConfig>>,
 }
 
 /// The configuration structure for the guest VM serialized from a toml file provided by user,
