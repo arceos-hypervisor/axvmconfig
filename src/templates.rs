@@ -71,6 +71,8 @@ pub fn get_vm_config_template(
             passthrough_devices: vec![],        // No passthrough devices by default
             interrupt_mode: Default::default(), // Use default interrupt mode
             virtio_blk_mmio,
+            excluded_devices: vec![],           // No excluded devices by default
+            passthrough_addresses: vec![],      // No passthrough addresses by default
         },
     }
 }

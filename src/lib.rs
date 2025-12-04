@@ -16,6 +16,7 @@ use serde_repr::{Deserialize_repr, Serialize_repr};
 
 use axerrno::AxResult;
 
+#[cfg_attr(feature = "std", derive(schemars::JsonSchema))]
 /// A part of `AxVMConfig`, which represents guest VM type.
 #[derive(Default, Clone, Copy, PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
 pub enum VMType {
@@ -52,6 +53,7 @@ impl From<VMType> for usize {
 ///
 /// Defines how virtual machine memory regions are mapped to host physical memory.
 /// This affects memory allocation and management strategies in the hypervisor.
+#[cfg_attr(feature = "std", derive(schemars::JsonSchema))]
 #[derive(Debug, Clone, PartialEq, Eq, serde_repr::Serialize_repr, serde_repr::Deserialize_repr)]
 #[repr(u8)]
 pub enum VmMemMappingType {
@@ -59,6 +61,8 @@ pub enum VmMemMappingType {
     MapAlloc = 0,
     /// The memory region is identical to the host physical memory region.
     MapIdentical = 1,
+    /// The memory region is reserved memory for the guest OS.
+    MapReserved = 2,
 }
 
 /// The default value of `VmMemMappingType` is `MapAlloc`.
@@ -73,6 +77,7 @@ impl Default for VmMemMappingType {
 /// Represents a contiguous memory region within the guest's physical address space.
 /// Each region has specific properties including address, size, access permissions,
 /// and mapping type that determine how it's handled by the hypervisor.
+#[cfg_attr(feature = "std", derive(schemars::JsonSchema))]
 #[derive(Debug, Default, Clone, serde::Serialize, serde::Deserialize)]
 pub struct VmMemConfig {
     /// The start address of the memory region in GPA (Guest Physical Address).
@@ -99,6 +104,7 @@ pub struct VmMemConfig {
 /// - 0x80 - 0xDF: Reserved for future use.
 /// - 0xE0 - 0xEF: Virtio devices.
 /// - 0xF0 - 0xFF: Reserved for future use.
+#[cfg_attr(feature = "std", derive(schemars::JsonSchema))]
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Serialize_repr, Deserialize_repr, Enumerable)]
 #[repr(u8)]
 pub enum EmulatedDeviceType {
@@ -216,6 +222,7 @@ impl EmulatedDeviceType {
 }
 
 /// A part of `AxVMConfig`, which represents the configuration of an emulated device for a virtual machine.
+#[cfg_attr(feature = "std", derive(schemars::JsonSchema))]
 #[derive(Debug, Default, Clone, serde::Serialize, serde::Deserialize)]
 pub struct EmulatedDeviceConfig {
     /// The name of the device.
@@ -233,21 +240,27 @@ pub struct EmulatedDeviceConfig {
 }
 
 /// A part of `AxVMConfig`, which represents the configuration of a pass-through device for a virtual machine.
-#[derive(Debug, Default, Clone, serde::Serialize, serde::Deserialize)]
+#[cfg_attr(feature = "std", derive(schemars::JsonSchema))]
+#[derive(Debug, Default, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
 pub struct PassThroughDeviceConfig {
     /// The name of the device.
     pub name: String,
     /// The base GPA (Guest Physical Address) of the device.
+    #[serde(default)]
     pub base_gpa: usize,
     /// The base HPA (Host Physical Address) of the device.
+    #[serde(default)]
     pub base_hpa: usize,
     /// The address length of the device.
+    #[serde(default)]
     pub length: usize,
     /// The IRQ (Interrupt Request) ID of the device.
+    #[serde(default)]
     pub irq_id: usize,
 }
 
 /// A part of `AxVMConfig`, which represents the configuration of a VirtIO block device for a virtual machine.
+#[cfg_attr(feature = "std", derive(schemars::JsonSchema))]
 #[derive(Debug, Default, Clone, serde::Serialize, serde::Deserialize)]
 pub struct VirtioBlkMmioDeviceConfig {
     /// The device ID.
@@ -274,7 +287,20 @@ pub struct VirtioBlkMmioDeviceConfig {
     pub serial: String,
 }
 
+/// A part of `AxVMConfig`, which represents the configuration of a pass-through address for a virtual machine.
+#[cfg_attr(feature = "std", derive(schemars::JsonSchema))]
+#[derive(Debug, Default, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
+pub struct PassThroughAddressConfig {
+    /// The base GPA (Guest Physical Address).
+    #[serde(default)]
+    pub base_gpa: usize,
+    /// The address length.
+    #[serde(default)]
+    pub length: usize,
+}
+
 /// The configuration structure for the guest VM base info.
+#[cfg_attr(feature = "std", derive(schemars::JsonSchema))]
 #[derive(Debug, Default, Clone, serde::Serialize, serde::Deserialize)]
 pub struct VMBaseConfig {
     /// VM ID.
@@ -306,6 +332,7 @@ pub struct VMBaseConfig {
 }
 
 /// The configuration structure for the guest VM kernel.
+#[cfg_attr(feature = "std", derive(schemars::JsonSchema))]
 #[derive(Debug, Default, Clone, serde::Serialize, serde::Deserialize)]
 pub struct VMKernelConfig {
     /// The entry point of the kernel image.
@@ -337,6 +364,7 @@ pub struct VMKernelConfig {
 }
 
 /// Specifies how the VM should handle interrupts and interrupt controllers.
+#[cfg_attr(feature = "std", derive(schemars::JsonSchema))]
 #[derive(Debug, Clone, Copy, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 pub enum VMInterruptMode {
     /// The VM will not handle interrupts, and the guest OS should not use interrupts.
@@ -357,6 +385,7 @@ impl Default for VMInterruptMode {
 }
 
 /// The configuration structure for the guest VM devices.
+#[cfg_attr(feature = "std", derive(schemars::JsonSchema))]
 #[derive(Debug, Default, Clone, serde::Serialize, serde::Deserialize)]
 pub struct VMDevicesConfig {
     /// Emu device Information
@@ -368,10 +397,17 @@ pub struct VMDevicesConfig {
     pub interrupt_mode: VMInterruptMode,
     /// VirtIO block device Information
     pub virtio_blk_mmio: Option<Vec<VirtioBlkMmioDeviceConfig>>,
+    ///we would not like to pass through devices
+    #[serde(default)]
+    pub excluded_devices: Vec<Vec<String>>,
+    ///we would like to pass through address
+    #[serde(default)]
+    pub passthrough_addresses: Vec<PassThroughAddressConfig>,
 }
 
 /// The configuration structure for the guest VM serialized from a toml file provided by user,
 /// and then converted to `AxVMConfig` for the VM creation.
+#[cfg_attr(feature = "std", derive(schemars::JsonSchema))]
 #[derive(Debug, Default, Clone, serde::Serialize, serde::Deserialize)]
 pub struct AxVMCrateConfig {
     /// The base configuration for the VM.
