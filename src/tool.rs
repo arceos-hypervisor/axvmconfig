@@ -10,7 +10,7 @@ use std::path::Path;
 use clap::{Args, Parser, Subcommand};
 
 use crate::templates::get_vm_config_template;
-use crate::AxVMCrateConfig;
+use crate::{AxVMCrateConfig, VirtioBlkMmioDeviceConfig};
 
 /// Main CLI structure for the axvmconfig tool
 ///
@@ -93,6 +93,20 @@ pub struct TemplateArgs {
     /// The output path of the template file.
     #[arg(short = 'O', long, value_name = "DIR", value_hint = clap::ValueHint::DirPath)]
     output: Option<std::path::PathBuf>,
+    
+    // Virtual block device related parameters
+    /// Enable virtual block device
+    #[arg(long)]
+    enable_virtio_blk: bool,
+    /// Virtual block device backend path
+    #[arg(long)]
+    virtio_blk_backend_path: Option<String>,
+    /// Virtual block device MMIO base address
+    #[arg(long, default_value_t = String::from("0x10000000"))]
+    virtio_blk_mmio_base: String,
+    /// Virtual block device interrupt number
+    #[arg(long, default_value_t = 10)]
+    virtio_blk_irq: usize,
 }
 
 /// Parse numeric values from command line arguments
@@ -173,6 +187,32 @@ pub fn run() {
                 args.kernel_path.clone()
             };
 
+            // Build virtual block device configuration (if enabled)
+            let virtio_blk_mmio = if args.enable_virtio_blk {
+                if let Some(backend_path) = args.virtio_blk_backend_path {
+                    // Create block device configuration
+                    let blk_device = VirtioBlkMmioDeviceConfig {
+                        device_id: format!("virtio-blk-{}", args.id),
+                        mmio_base: args.virtio_blk_mmio_base,
+                        mmio_size: String::from("0x1000"),
+                        interrupt_type: String::from("irq"),
+                        interrupt_number: args.virtio_blk_irq,
+                        guest_device_path: String::from("/dev/vda"),
+                        backend_type: String::from("file"),
+                        backend_path: backend_path,
+                        size: String::from("0"), // Auto detect size
+                        readonly: false,
+                        serial: format!("blk{}", args.id),
+                    };
+                    Some(vec![blk_device])
+                } else {
+                    eprintln!("Error: Backend path (virtio_blk_backend_path) must be specified when enabling virtual block device");
+                    std::process::exit(1);
+                }
+            } else {
+                None
+            };
+
             // Generate the VM configuration template with provided parameters
             let template = get_vm_config_template(
                 args.id,
@@ -184,6 +224,7 @@ pub fn run() {
                 args.kernel_load_addr,
                 args.image_location,
                 args.cmdline,
+                virtio_blk_mmio,
             );
 
             // Convert the configuration template to TOML format
