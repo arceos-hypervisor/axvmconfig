@@ -233,17 +233,21 @@ pub struct EmulatedDeviceConfig {
 }
 
 /// A part of `AxVMConfig`, which represents the configuration of a pass-through device for a virtual machine.
-#[derive(Debug, Default, Clone, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, Default, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
 pub struct PassThroughDeviceConfig {
     /// The name of the device.
     pub name: String,
     /// The base GPA (Guest Physical Address) of the device.
+    #[serde(default)]
     pub base_gpa: usize,
     /// The base HPA (Host Physical Address) of the device.
+    #[serde(default)]
     pub base_hpa: usize,
     /// The address length of the device.
+    #[serde(default)]
     pub length: usize,
     /// The IRQ (Interrupt Request) ID of the device.
+    #[serde(default)]
     pub irq_id: usize,
 }
 
@@ -339,6 +343,9 @@ pub struct VMDevicesConfig {
     /// How the VM should handle interrupts and interrupt controllers.
     #[serde(default)]
     pub interrupt_mode: VMInterruptMode,
+    ///we would not like to pass through devices
+    #[serde(default)]
+    pub excluded_devices: Vec<Vec<String>>,
 }
 
 /// The configuration structure for the guest VM serialized from a toml file provided by user,
