@@ -113,7 +113,9 @@ pub struct VmMemConfig {
 /// - 0x80 - 0xDF: Reserved for future use.
 /// - 0xE0 - 0xEF: Virtio devices.
 /// - 0xF0 - 0xFF: Reserved for future use.
-#[derive(Debug, Copy, Clone, PartialEq, Eq, Serialize_repr, Deserialize_repr, Enumerable, Default)]
+#[derive(
+    Debug, Copy, Clone, PartialEq, Eq, Serialize_repr, Deserialize_repr, Enumerable, Default,
+)]
 #[repr(u8)]
 pub enum EmulatedDeviceType {
     // Special devices and abstract device types.
