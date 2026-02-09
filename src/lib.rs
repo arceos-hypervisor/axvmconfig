@@ -119,7 +119,7 @@ pub struct VmMemConfig {
 /// - 0xE0 - 0xEF: Virtio devices.
 /// - 0xF0 - 0xFF: Reserved for future use.
 #[cfg_attr(feature = "std", derive(schemars::JsonSchema))]
-#[derive(Debug, Copy, Clone, PartialEq, Eq, Serialize_repr, Deserialize_repr, Enumerable)]
+#[derive(Debug, Default, Copy, Clone, PartialEq, Eq, Serialize_repr, Deserialize_repr, Enumerable)]
 #[repr(u8)]
 pub enum EmulatedDeviceType {
     // Special devices and abstract device types.
@@ -353,7 +353,7 @@ pub struct VMKernelConfig {
 
 /// Specifies how the VM should handle interrupts and interrupt controllers.
 #[cfg_attr(feature = "std", derive(schemars::JsonSchema))]
-#[derive(Debug, Clone, Copy, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, Default, Clone, Copy, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 pub enum VMInterruptMode {
     /// The VM will not handle interrupts, and the guest OS should not use interrupts.
     #[serde(rename = "no_irq", alias = "no", alias = "none")]
