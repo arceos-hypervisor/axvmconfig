@@ -119,7 +119,9 @@ pub struct VmMemConfig {
 /// - 0xE0 - 0xEF: Virtio devices.
 /// - 0xF0 - 0xFF: Reserved for future use.
 #[cfg_attr(feature = "std", derive(schemars::JsonSchema))]
-#[derive(Debug, Default, Copy, Clone, PartialEq, Eq, Serialize_repr, Deserialize_repr, Enumerable)]
+#[derive(
+    Debug, Default, Copy, Clone, PartialEq, Eq, Serialize_repr, Deserialize_repr, Enumerable,
+)]
 #[repr(u8)]
 pub enum EmulatedDeviceType {
     // Special devices and abstract device types.
