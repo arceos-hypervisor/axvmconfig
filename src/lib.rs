@@ -411,6 +411,3 @@ impl AxVMCrateConfig {
         Ok(config)
     }
 }
-
-#[cfg(test)]
-mod test;

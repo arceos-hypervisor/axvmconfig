@@ -1,6 +1,6 @@
 <h1 align="center">axvmconfig</h1>
 
-<p align="center">Virtual Machine Configuration Tool and Library</p>
+<p align="center">虚拟机配置工具与库</p>
 
 <div align="center">
 
@@ -11,34 +11,34 @@
 
 </div>
 
-English | [中文](README_CN.md)
+[English](README.md) | 中文
 
 # Introduction
 
-`axvmconfig` is a virtual machine configuration tool and library for AxVisor. It provides Rust data structures and a command-line tool for parsing, validating, and generating TOML-based VM configuration files across multiple architectures.
+`axvmconfig` 是面向 AxVisor 的虚拟机配置工具与库。它提供 Rust 数据结构和命令行工具，用于在多种体系结构下解析、校验和生成基于 TOML 的虚拟机配置文件。
 
-This library exports several core configuration types, including:
+该库导出多个核心配置类型，包括：
 
-- **`AxVMCrateConfig`** - Top-level VM configuration parsed from TOML
-- **`VMType`** - Enumerates guest VM types such as HostVM, RTOS, and Linux
-- **`VmMemMappingType`** - Defines guest memory mapping modes
-- **`EmulatedDeviceType`** - Enumerates supported emulated device kinds
-- **`VMInterruptMode`** - Defines interrupt handling modes such as `no_irq`, `emulated`, and `passthrough`
+- **`AxVMCrateConfig`** - 从 TOML 解析得到的顶层虚拟机配置
+- **`VMType`** - 表示 HostVM、RTOS、Linux 等 guest 类型
+- **`VmMemMappingType`** - 定义 guest 内存映射方式
+- **`EmulatedDeviceType`** - 枚举受支持的模拟设备类型
+- **`VMInterruptMode`** - 定义 `no_irq`、`emulated`、`passthrough` 等中断处理模式
 
-With the `std` feature enabled, the crate also provides the `axvmconfig` CLI tool for checking existing configurations and generating templates.
+当启用 `std` feature 时，该 crate 还提供 `axvmconfig` CLI 工具，用于检查已有配置和生成模板。
 
 ## Quick Start
 
 ### Requirements
 
-- Rust nightly toolchain
-- Rust components: rust-src, clippy, rustfmt
+- Rust nightly 工具链
+- Rust 组件：rust-src、clippy、rustfmt
 
 ```bash
-# Install rustup (if not installed)
+# 安装 rustup（如果尚未安装）
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
-# Install nightly toolchain and components
+# 安装 nightly 工具链与所需组件
 rustup install nightly
 rustup component add rust-src clippy rustfmt --toolchain nightly
 ```
@@ -46,13 +46,13 @@ rustup component add rust-src clippy rustfmt --toolchain nightly
 ### Run Check and Test
 
 ```bash
-# 1. Enter the repository
+# 1. 进入仓库目录
 cd axvmconfig
 
-# 2. Code check
+# 2. 代码检查
 ./scripts/check.sh
 
-# 3. Run tests
+# 3. 运行测试
 ./scripts/test.sh
 ```
 
@@ -60,7 +60,7 @@ cd axvmconfig
 
 ### Installation
 
-Add to your `Cargo.toml`:
+将以下依赖加入 `Cargo.toml`：
 
 ```toml
 [dependencies]
@@ -114,21 +114,21 @@ interrupt_mode = "emulated"
 
 ### Documentation
 
-Generate and view API documentation:
+生成并查看 API 文档：
 
 ```bash
 cargo doc --no-deps --open
 ```
 
-Online documentation: [docs.rs/axvmconfig](https://docs.rs/axvmconfig)
+在线文档： [docs.rs/axvmconfig](https://docs.rs/axvmconfig)
 
 # Contributing
 
-1. Fork the repository and create a branch
-2. Run local check: `./scripts/check.sh`
-3. Run local tests: `./scripts/test.sh`
-4. Submit PR and pass CI checks
+1. Fork 仓库并创建分支
+2. 本地运行检查：`./scripts/check.sh`
+3. 本地运行测试：`./scripts/test.sh`
+4. 提交 PR 并通过 CI 检查
 
 # License
 
-Licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE) for details.
+本项目基于 Apache License 2.0 许可证发布。详见 [LICENSE](LICENSE)。

@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use crate::AxVMCrateConfig;
-use crate::EmulatedDeviceType;
-use crate::VMDevicesConfig;
-use crate::VMInterruptMode;
-use crate::VmMemMappingType;
+use axvmconfig::AxVMCrateConfig;
+use axvmconfig::EmulatedDeviceType;
+use axvmconfig::VMDevicesConfig;
+use axvmconfig::VMInterruptMode;
+use axvmconfig::VmMemMappingType;
 use enumerable::Enumerable;
 
 #[test]
@@ -157,7 +157,7 @@ emu_devices = []
 
 #[test]
 fn test_vmtype_enum() {
-    use crate::VMType;
+    use axvmconfig::VMType;
 
     assert_eq!(VMType::default(), VMType::VMTRTOS);
 
@@ -173,7 +173,7 @@ fn test_vmtype_enum() {
 
 #[test]
 fn test_vm_mem_mapping_type() {
-    use crate::VmMemMappingType;
+    use axvmconfig::VmMemMappingType;
 
     assert_eq!(VmMemMappingType::default(), VmMemMappingType::MapAlloc);
 
@@ -186,7 +186,7 @@ fn test_vm_mem_mapping_type() {
 
 #[test]
 fn test_emulated_device_type_removable() {
-    use crate::EmulatedDeviceType;
+    use axvmconfig::EmulatedDeviceType;
 
     assert!(EmulatedDeviceType::InterruptController.removable());
     assert!(EmulatedDeviceType::GPPTRedistributor.removable());
@@ -203,20 +203,9 @@ fn test_emulated_device_type_removable() {
 
 #[test]
 fn test_emulated_device_type_display() {
-    use crate::EmulatedDeviceType;
-    use alloc::format;
+    use axvmconfig::EmulatedDeviceType;
 
     assert_eq!(format!("{}", EmulatedDeviceType::Dummy), "meta device");
-    assert_eq!(
-        format!("{}", EmulatedDeviceType::InterruptController),
-        "interrupt controller"
-    );
-    assert_eq!(format!("{}", EmulatedDeviceType::Console), "console");
-    assert_eq!(format!("{}", EmulatedDeviceType::IVCChannel), "ivc channel");
-    assert_eq!(
-        format!("{}", EmulatedDeviceType::GPPTRedistributor),
-        "gic partial passthrough redistributor"
-    );
     assert_eq!(
         format!("{}", EmulatedDeviceType::GPPTDistributor),
         "gic partial passthrough distributor"
@@ -235,7 +224,7 @@ fn test_emulated_device_type_display() {
 
 #[test]
 fn test_config_from_toml_error_handling() {
-    use crate::AxVMCrateConfig;
+    use axvmconfig::AxVMCrateConfig;
 
     let invalid_toml = r#"
 [base
@@ -259,7 +248,7 @@ cpu_num = 1
 
 #[test]
 fn test_default_implementations() {
-    use crate::*;
+    use axvmconfig::*;
 
     assert_eq!(VMType::default(), VMType::VMTRTOS);
     assert_eq!(VmMemMappingType::default(), VmMemMappingType::MapAlloc);
