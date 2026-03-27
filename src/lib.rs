@@ -130,6 +130,8 @@ pub enum EmulatedDeviceType {
     GPPTDistributor = 0x21,
     /// ARM GIC Partial Passthrough Interrupt Translation Service device.
     GPPTITS = 0x22,
+    // 0x30: PPPT (PLIC Partial Passthrough) devices.
+    PPPTGlobal = 0x30,
 
     // 0x30: PPPT (PLIC Partial Passthrough) devices.
     /// RISC-V PLIC Partial Passthrough Global device.
